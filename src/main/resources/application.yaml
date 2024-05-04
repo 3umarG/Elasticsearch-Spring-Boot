@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: Elastich-Spring-Boot
+
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+
+  elasticsearch:
+    uris: localhost:9200
+
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
