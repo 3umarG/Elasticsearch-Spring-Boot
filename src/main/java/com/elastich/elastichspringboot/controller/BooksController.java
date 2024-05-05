@@ -1,10 +1,15 @@
 package com.elastich.elastichspringboot.controller;
 
 import com.elastich.elastichspringboot.DAO.BooksRepository;
+import com.elastich.elastichspringboot.DAO.CriteriaQueryRepository;
+import com.elastich.elastichspringboot.DAO.NativeQueryRepository;
 import com.elastich.elastichspringboot.model.Book;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/books")
@@ -12,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class BooksController {
 
     private final BooksRepository booksRepository;
+    private final CriteriaQueryRepository criteriaRepo;
+    private final NativeQueryRepository nativeQueryRepo;
 
     @GetMapping
     public ResponseEntity<Iterable<Book>> getAllBooks() {
@@ -54,4 +61,15 @@ public class BooksController {
                     return ResponseEntity.noContent().build();
                 }).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/search/native-query")
+    public ResponseEntity<List<SearchHit<Book>>> searchByNativeQuery(@RequestParam String q) {
+        return ResponseEntity.ok(nativeQueryRepo.searchByFields(q, List.of("title", "author")));
+    }
+
+    @GetMapping("/search/criteria-query")
+    public ResponseEntity<List<SearchHit<Book>>> searchByCriteriaQuery(@RequestParam String q) {
+        return ResponseEntity.ok(criteriaRepo.searchByTitle(q));
+    }
+
 }
