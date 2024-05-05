@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BooksRepository extends ElasticsearchRepository<Book,Integer> {
-
+    Iterable<Book> findByTitleContainingIgnoreCase(String title);
 }
