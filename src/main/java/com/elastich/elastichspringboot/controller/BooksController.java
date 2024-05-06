@@ -63,13 +63,18 @@ public class BooksController {
     }
 
     @GetMapping("/search/native-query")
-    public ResponseEntity<List<SearchHit<Book>>> searchByNativeQuery(@RequestParam String q) {
-        return ResponseEntity.ok(nativeQueryRepo.searchByFields(q, List.of("title", "author")));
+    public ResponseEntity<List<SearchHit<Book>>> searchByNativeQuery(@RequestParam String q,
+                                                                     @RequestParam Integer page,
+                                                                     @RequestParam Integer size) {
+        return ResponseEntity.ok(nativeQueryRepo.searchByFields(q, List.of("title", "author"), page, size));
     }
 
     @GetMapping("/search/criteria-query")
-    public ResponseEntity<List<SearchHit<Book>>> searchByCriteriaQuery(@RequestParam String q) {
-        return ResponseEntity.ok(criteriaRepo.searchByTitle(q));
+    public ResponseEntity<List<SearchHit<Book>>> searchByCriteriaQuery(@RequestParam String q,
+                                                                       @RequestParam Integer page,
+                                                                       @RequestParam Integer size
+    ) {
+        return ResponseEntity.ok(criteriaRepo.searchByTitle(q, page, size));
     }
 
 }

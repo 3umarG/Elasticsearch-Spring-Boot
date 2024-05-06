@@ -2,6 +2,7 @@ package com.elastich.elastichspringboot.DAO;
 
 import com.elastich.elastichspringboot.model.Book;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.data.elasticsearch.core.query.Criteria;
@@ -20,27 +21,39 @@ public class CriteriaQueryRepository {
 
     /**
      * Generated Query :
-     * "query":{
-     * "bool":{
-     * "must":[
      * {
-     * "query_string":{
-     * "analyze_wildcard":true,
-     * "fields":[
-     * "title"
-     * ],
-     * "query":"*omar*"
-     * }
-     * }
-     * ]
-     * }
+     *    "query":{
+     *       "bool":{
+     *          "should":[
+     *             {
+     *                "query_string":{
+     *                   "analyze_wildcard":true,
+     *                   "fields":[
+     *                      "title"
+     *                   ],
+     *                   "query":"*b*"
+     *                }
+     *             },
+     *             {
+     *                "query_string":{
+     *                   "analyze_wildcard":true,
+     *                   "fields":[
+     *                      "author"
+     *                   ],
+     *                   "query":"*b*"
+     *                }
+     *             }
+     *          ]
+     *       }
+     *    },
+     *    "size":2
      * }
      */
-    public List<SearchHit<Book>> searchByTitle(String q) {
+    public List<SearchHit<Book>> searchByTitle(String q, int page, int size) {
         Criteria criteria =
                 new Criteria("title").contains(q)
                         .or("author").contains(q);
-        Query searchQuery = new CriteriaQuery(criteria);
+        Query searchQuery = new CriteriaQuery(criteria, PageRequest.of(page, size));
         return elasticsearchOperations
                 .search(searchQuery, Book.class)
                 .stream().toList();
