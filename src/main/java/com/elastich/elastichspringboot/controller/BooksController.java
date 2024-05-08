@@ -5,20 +5,30 @@ import com.elastich.elastichspringboot.DAO.CriteriaQueryRepository;
 import com.elastich.elastichspringboot.DAO.NativeQueryRepository;
 import com.elastich.elastichspringboot.model.Book;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.elasticsearch.core.SearchHit;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/api/books")
 @RequiredArgsConstructor
+@Slf4j
 public class BooksController {
 
     private final BooksRepository booksRepository;
     private final CriteriaQueryRepository criteriaRepo;
     private final NativeQueryRepository nativeQueryRepo;
+    private static final AtomicInteger counter = new AtomicInteger(0);
+
+    @GetMapping("/log")
+    public ResponseEntity<Integer> testLogs() {
+        log.info(counter.getAndIncrement() + "- Testing Logs .............");
+        return ResponseEntity.ok(counter.get());
+    }
 
     @GetMapping
     public ResponseEntity<Iterable<Book>> getAllBooks() {
