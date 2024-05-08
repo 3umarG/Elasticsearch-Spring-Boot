@@ -20,5 +20,7 @@ spring:
     show-sql: true
 
 logging:
+  file:
+    name: logs/books-logs.log
   level:
     org: debug
