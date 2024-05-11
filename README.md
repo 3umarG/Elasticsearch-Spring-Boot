@@ -1,4 +1,4 @@
-# Elasticsearch wiith Spring Boot
+# Elasticsearch with Spring Boot
 This project demonstrates how to integrate Elasticsearch with a Spring Boot application for efficient search functionality.
 
 ## Features:
